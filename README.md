@@ -1,3 +1,5 @@
+This project is part of the university group assignment, which designed to fulfill the academic purpose only, strictly not for commercial purposes. 
+
 # wt_grpProject
 A Residential Property Landing Website, designed and used to introduce residential properties to the public. Included functions like viewing properties, leave us questions, and a simple mortgage loan calculator. 
 
