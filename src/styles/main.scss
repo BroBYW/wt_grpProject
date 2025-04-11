@@ -1,0 +1,79 @@
+// Import Bootstrap
+@import "bootstrap/scss/bootstrap";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+// Custom Variables
+$primary: #2c3e50;
+$secondary: #34495e;
+$success: #27ae60;
+$info: #3498db;
+$warning: #f1c40f;
+$danger: #e74c3c;
+
+// Global Styles
+body {
+    font-family: 'Inter', sans-serif;
+    color: #2c3e50;
+}
+
+// Navigation
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    .nav-link {
+        font-weight: 500;
+        &:hover {
+            color: $primary;
+        }
+    }
+}
+
+// Hero Section
+.hero {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/src/assets/images/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    .btn-primary {
+        padding: 0.8rem 2rem;
+        font-weight: 600;
+    }
+}
+
+// Feature Cards
+.feature-card {
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    height: 100%;
+    transition: transform 0.3s ease;
+    &:hover {
+        transform: translateY(-5px);
+    }
+    h3 {
+        color: $primary;
+        margin-bottom: 1rem;
+    }
+}
+
+// Footer
+.footer {
+    .social-links {
+        a {
+            font-size: 1.5rem;
+            transition: opacity 0.3s ease;
+            &:hover {
+                opacity: 0.8;
+            }
+        }
+    }
+}
+
+// Responsive Adjustments
+@media (max-width: 768px) {
+    .hero {
+        text-align: center;
+    }
+    .feature-card {
+        margin-bottom: 1rem;
+    }
+}
