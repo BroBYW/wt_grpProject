@@ -35,6 +35,7 @@ cd [project-directory]
 2. Install dependencies:
 ```bash
 npm install
+npm install @azure-rest/ai-inference @azure/core-auth @azure/core-sse
 ```
 
 ## Development
