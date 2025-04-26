@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Floor Plans - SoleEstate</title>
     <link rel="stylesheet" href="/src/styles/main.scss">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -31,23 +32,30 @@
     </nav>
 
     <!-- Floor Plan Header -->
-    <section class="page-header py-5 mt-5">
+    <section class="hero-floorplan"
+        style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/design4.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; color: white; min-height: 300px; display: flex; align-items: center; text-align: left; padding: 60px 0;">
         <div class="container">
-            <h1 class="display-4 fw-bold">Floor Plans</h1>
-            <p class="lead">Discover our thoughtfully designed living spaces</p>
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 style="font-weight: 700; margin-bottom: 20px; font-size: 3rem;">Floor Plans</h1>
+                    <p style="font-size: 1.2rem;">Explore our thoughtfully designed living spaces, presenting you with
+                        the ideal home for comfort and livability.</p>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Floor Plan Gallery -->
-    <section class="floor-plans py-5">
+    <section class="floor-plans-section py-5">
         <div class="container">
             <!-- Unit Type Filters -->
-            <div class="unit-filters mb-4">
-                <div class="btn-group" role="group" aria-label="Unit type filters">
-                    <button type="button" class="btn btn-outline-primary active" data-filter="all">All Units</button>
-                    <button type="button" class="btn btn-outline-primary" data-filter="1bhk">1 BHK</button>
-                    <button type="button" class="btn btn-outline-primary" data-filter="2bhk">2 BHK</button>
-                    <button type="button" class="btn btn-outline-primary" data-filter="3bhk">3 BHK</button>
+            <div class="filter-container  mb-4 text-center">
+                <h4 class="filter-title text-primary mb-3">Filter by Unit Type</h4>
+                <div class="filter-buttons">
+                    <button type="button" class="btn-filter active" data-filter="all">All Units</button>
+                    <button type="button" class="btn-filter" data-filter="1bhk">1 BHK</button>
+                    <button type="button" class="btn-filter" data-filter="2bhk">2 BHK</button>
+                    <button type="button" class="btn-filter" data-filter="3bhk">3 BHK</button>
                 </div>
             </div>
 
@@ -55,62 +63,244 @@
             <div class="row g-4">
                 <!-- 1 BHK Unit -->
                 <div class="col-md-6 col-lg-4 floor-plan-item" data-type="1bhk">
-                    <div class="card h-100">
-                        <div class="floor-plan-image position-relative">
+                    <div class="card floor-plan-card h-100">
+                        <div class="card-img-wrapper">
                             <img src="/src/assets/images/1bhk.avif" class="card-img-top" alt="1 BHK Floor Plan">
-                            <div class="room-highlights"></div>
+                            <div class="card-badge">Hot Sale</div>
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">1 BHK Premium</h5>
-                            <p class="card-text">Total Area: 750 sq.ft.</p>
-                            <ul class="list-unstyled">
-                                <li>✓ Spacious living room</li>
-                                <li>✓ Modern kitchen</li>
-                                <li>✓ Balcony with view</li>
+                            <h5 class="card-title">Urban Elegant 1-Bedroom Unit</h5>
+                            <div class="d-flex justify-content-between">
+                                <p class="card-text mb-2">69.7㎡ (750 sq.ft.)</p>
+                                <p class="text-primary fw-bold">From RM 1.65 Million</p>
+                            </div>
+
+                            <table class="specs-table">
+                                <tr>
+                                    <td>Bedrooms</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Bathrooms</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Living Room</td>
+                                    <td>21㎡</td>
+                                </tr>
+                                <tr>
+                                    <td>Orientation</td>
+                                    <td>Southeast</td>
+                                </tr>
+                            </table>
+
+                            <ul class="feature-list list-unstyled">
+                                <li class="feature-item"><i class="fas fa-check-circle feature-icon"></i> Spacious and
+                                    Bright Living Room</li>
+                                <li class="feature-item"><i class="fas fa-check-circle feature-icon"></i> Modern Open
+                                    Kitchen</li>
+                                <li class="feature-item"><i class="fas fa-check-circle feature-icon"></i> Scenic Balcony
+                                </li>
                             </ul>
-                            <a href="/src/assets/pdf/1bhk-plan.pdf" class="btn btn-outline-primary" download>Download
-                                PDF</a>
+
+                            <div class="card-actions">
+                                <a href="/src/assets/pdf/1bhk-plan.pdf" class="btn btn-primary" download>Download Floor
+                                    Plan</a>
+                                <button class="btn btn-outline-secondary"><i class="fas fa-eye"></i> View in 3D</button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- 2 BHK Unit -->
                 <div class="col-md-6 col-lg-4 floor-plan-item" data-type="2bhk">
-                    <div class="card h-100">
-                        <div class="floor-plan-image position-relative">
+                    <div class="card floor-plan-card h-100">
+                        <div class="card-img-wrapper">
                             <img src="/src/assets/images/2bhk.jpg" class="card-img-top" alt="2 BHK Floor Plan">
-                            <div class="room-highlights"></div>
+                            <div class="card-badge">Recommended</div>
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">2 BHK Luxury</h5>
-                            <p class="card-text">Total Area: 1100 sq.ft.</p>
-                            <ul class="list-unstyled">
-                                <li>✓ Master bedroom with ensuite</li>
-                                <li>✓ Separate dining area</li>
-                                <li>✓ Two balconies</li>
+                            <h5 class="card-title">Modern 2-Bedroom Luxury Suite</h5>
+                            <div class="d-flex justify-content-between">
+                                <p class="card-text mb-2">102.2㎡ (1100 sq.ft.)</p>
+                                <p class="text-primary fw-bold">From RM 2.28 Million</p>
+                            </div>
+
+                            <table class="specs-table">
+                                <tr>
+                                    <td>Bedrooms</td>
+                                    <td>2</td>
+                                </tr>
+                                <tr>
+                                    <td>Bathrooms</td>
+                                    <td>2</td>
+                                </tr>
+                                <tr>
+                                    <td>Living Room</td>
+                                    <td>28㎡</td>
+                                </tr>
+                                <tr>
+                                    <td>Orientation</td>
+                                    <td>North-South</td>
+                                </tr>
+                            </table>
+
+                            <ul class="feature-list list-unstyled">
+                                <li class="feature-item"><i class="fas fa-check-circle feature-icon"></i> Master Bedroom
+                                    Suite</li>
+                                <li class="feature-item"><i class="fas fa-check-circle feature-icon"></i> Separate
+                                    Dining Area</li>
+                                <li class="feature-item"><i class="fas fa-check-circle feature-icon"></i> Dual Balcony
+                                    Design</li>
                             </ul>
-                            <a href="/src/assets/pdf/2bhk.pdf" class="btn btn-outline-primary" download>Download PDF</a>
+
+                            <div class="card-actions">
+                                <a href="/src/assets/pdf/2bhk.pdf" class="btn btn-primary" download>Download Floor
+                                    Plan</a>
+                                <button class="btn btn-outline-secondary"><i class="fas fa-eye"></i> View in 3D</button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- 3 BHK Unit -->
                 <div class="col-md-6 col-lg-4 floor-plan-item" data-type="3bhk">
-                    <div class="card h-100">
-                        <div class="floor-plan-image position-relative">
+                    <div class="card floor-plan-card h-100">
+                        <div class="card-img-wrapper">
                             <img src="/src/assets/images/3bhk.jpg" class="card-img-top" alt="3 BHK Floor Plan">
-                            <div class="room-highlights"></div>
+                            <div class="card-badge">Premium Series</div>
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">3 BHK Executive</h5>
-                            <p class="card-text">Total Area: 1500 sq.ft.</p>
-                            <ul class="list-unstyled">
-                                <li>✓ Three spacious bedrooms</li>
-                                <li>✓ Family living area</li>
-                                <li>✓ Premium finishes</li>
+                            <h5 class="card-title">Prestigious 3-Bedroom Family Residence</h5>
+                            <div class="d-flex justify-content-between">
+                                <p class="card-text mb-2">139.4㎡ (1500 sq.ft.)</p>
+                                <p class="text-primary fw-bold">From RM 3.45 Million</p>
+                            </div>
+
+                            <table class="specs-table">
+                                <tr>
+                                    <td>Bedrooms</td>
+                                    <td>3</td>
+                                </tr>
+                                <tr>
+                                    <td>Bathrooms</td>
+                                    <td>2</td>
+                                </tr>
+                                <tr>
+                                    <td>Living Room</td>
+                                    <td>35㎡</td>
+                                </tr>
+                                <tr>
+                                    <td>Orientation</td>
+                                    <td>North-South</td>
+                                </tr>
+                            </table>
+
+                            <ul class="feature-list list-unstyled">
+                                <li class="feature-item"><i class="fas fa-check-circle feature-icon"></i> Three Spacious
+                                    Bedrooms</li>
+                                <li class="feature-item"><i class="fas fa-check-circle feature-icon"></i> Family
+                                    Activity Area</li>
+                                <li class="feature-item"><i class="fas fa-check-circle feature-icon"></i> High-End
+                                    Finishes</li>
                             </ul>
-                            <a href="/src/assets/pdf/3bhk-plan.pdf" class="btn btn-outline-primary" download>Download
-                                PDF</a>
+
+                            <div class="card-actions">
+                                <a href="/src/assets/pdf/3bhk-plan.pdf" class="btn btn-primary" download>Download Floor
+                                    Plan</a>
+                                <button class="btn btn-outline-secondary"><i class="fas fa-eye"></i> View in 3D</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="comparison-section">
+        <div class="container">
+            <h2 class="text-primary mb-2">Unit Comparison</h2>
+            <p class="text-muted mb-4">Compare different units to choose the one that best suits your ideal home.</p>
+
+            <div class="card shadow-sm">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Features</th>
+                                    <th>Urban Elegant 1-Bedroom</th>
+                                    <th>Modern 2-Bedroom Suite</th>
+                                    <th>Prestigious 3-Bedroom Residence</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Area</td>
+                                    <td>69.7㎡</td>
+                                    <td>102.2㎡</td>
+                                    <td>139.4㎡</td>
+                                </tr>
+                                <tr>
+                                    <td>Starting Price</td>
+                                    <td>RM 1.65 Million</td>
+                                    <td>RM 2.28 Million</td>
+                                    <td>RM 3.45 Million</td>
+                                </tr>
+                                <tr>
+                                    <td>Suitable For</td>
+                                    <td>Singles/Young Couples</td>
+                                    <td>Small Families</td>
+                                    <td>Large Families</td>
+                                </tr>
+                                <tr>
+                                    <td>Finish Standard</td>
+                                    <td>Fully Furnished</td>
+                                    <td>Fully Furnished</td>
+                                    <td>Luxury Furnished</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tips Section -->
+    <section class="tips-section py-5">
+        <div class="container">
+            <h2 class="text-primary mb-4">Home Buying Tips</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card shadow-sm h-100 tip-card">
+                        <div class="card-body">
+                            <h3 class="h5"><i class="bi bi-lightbulb text-warning me-2"></i>How to Choose the Right Unit
+                            </h3>
+                            <p class="text-muted">Consider the number of family members and living habits. Choose a unit
+                                that meets your long-term needs. Pay attention to the number of bedrooms, functional
+                                areas, and usable space.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm h-100 tip-card">
+                        <div class="card-body">
+                            <h3 class="h5"><i class="bi bi-compass text-success me-2"></i>Orientation and Lighting</h3>
+                            <p class="text-muted">North-South oriented units have good ventilation and ample lighting.
+                                Main living spaces should face south to ensure sufficient sunlight and enhance living
+                                comfort.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm h-100 tip-card">
+                        <div class="card-body">
+                            <h3 class="h5"><i class="bi bi-rulers text-primary me-2"></i>Space Layout</h3>
+                            <p class="text-muted">A reasonable layout can improve quality of life. Pay attention to the
+                                separation of active and quiet areas, bathroom placement, and storage space design to
+                                meet daily needs.</p>
                         </div>
                     </div>
                 </div>
@@ -209,6 +399,74 @@
     <script src="main.js"></script>
 
     <script type="module" src="/src/js/main.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Added hover effect to the house selection tips card
+            const tipCards = document.querySelectorAll('.tips-section .card');
+            tipCards.forEach(card => {
+                card.addEventListener('mouseenter', function () {
+                    this.style.transform = 'translateY(-8px)';
+                    this.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.15)';
+                    this.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
+                });
+
+                card.addEventListener('mouseleave', function () {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.08)';
+                });
+            });
+
+            // Filter functionality for floor plan cards
+            const filterButtons = document.querySelectorAll('.btn-filter');
+            const floorPlanItems = document.querySelectorAll('.floor-plan-item');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to the clicked button
+                    this.classList.add('active');
+
+                    const filter = this.getAttribute('data-filter');
+
+                    // Show/hide floor plan items based on filter
+                    floorPlanItems.forEach(item => {
+                        if (filter === 'all' || item.getAttribute('data-type') === filter) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Add hover and click effect to "View in 3D" buttons
+            const view3DButtons = document.querySelectorAll('.btn-outline-secondary');
+
+            view3DButtons.forEach(button => {
+                // Hover effect
+                button.addEventListener('mouseenter', function () {
+                    this.style.transform = 'translateY(-8px)';
+                    this.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.15)';
+                    this.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
+                    this.style.color = 'black'; // Ensure font color remains black
+                });
+
+                button.addEventListener('mouseleave', function () {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.08)';
+                    this.style.color = 'gray'; // Ensure font color remains black
+                });
+
+                // Click effect
+                button.addEventListener('click', function () {
+                    this.style.backgroundColor = '#0d6efd'; // Match "Download Floor Plan" blue
+                    this.style.color = 'black'; // Ensure font color remains black
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
