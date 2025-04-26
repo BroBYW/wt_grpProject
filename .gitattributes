@@ -1,0 +1,11 @@
+* -text
+
+# 源代码文件使用LF
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+
+# 构建文件视为二进制
+dist/** binary 

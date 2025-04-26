@@ -1,50 +1,69 @@
 // Import Bootstrap JS and dependencies
-import 'bootstrap'
+import "bootstrap";
 
 // Import custom modules
-import { initializeNavbar } from './modules/navbar'
-import { initializeHero } from './modules/hero'
-import { initializeFloorPlan } from './modules/floor-plan'
-import { initializeGallery } from './modules/gallery'
-import { initializeContactForm } from './modules/contact'
-import { initializeMortgageCalculator } from './modules/calculator'
+import { initializeNavbar } from "./modules/navbar";
+import { initializeHero } from "./modules/hero";
+import { initializeFloorPlan } from "./modules/floor-plan";
+import { initializeGallery } from "./modules/gallery";
+import { initializeContactForm } from "./modules/contact";
+import { initializeMortgageCalculator } from "./modules/calculator";
+
+// 立即初始化房贷计算器
+try {
+  const calculatorForm = document.getElementById("mortgageCalculator");
+  if (calculatorForm) {
+    console.log("main.js: 找到计算器表单，尝试初始化计算器...");
+    initializeMortgageCalculator();
+  }
+} catch (error) {
+  console.error("main.js: 初始化计算器时出错:", error);
+}
 
 // Initialize components when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize Bootstrap components
-    initializeNavbar()
-    initializeHero()
-    initializeFloorPlan()
-    initializeGallery()
-    initializeContactForm()
-    initializeMortgageCalculator()
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM完全加载，初始化所有组件");
 
-    // Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault()
-            const target = document.querySelector(this.getAttribute('href'))
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                })
-            }
-        })
-    })
+  // Initialize Bootstrap components
+  initializeNavbar();
+  initializeHero();
+  initializeFloorPlan();
+  initializeGallery();
+  initializeContactForm();
 
-    // Add scroll event listener for navbar background
-    const navbar = document.querySelector('.navbar')
-    if (navbar) {
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('navbar-scrolled')
-            } else {
-                navbar.classList.remove('navbar-scrolled')
-            }
-        })
-    }
-})
+  // 再次尝试初始化计算器以确保它加载
+  try {
+    initializeMortgageCalculator();
+  } catch (error) {
+    console.error("DOM加载后初始化计算器失败:", error);
+  }
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute("href"));
+      if (target) {
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    });
+  });
+
+  // Add scroll event listener for navbar background
+  const navbar = document.querySelector(".navbar");
+  if (navbar) {
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add("navbar-scrolled");
+      } else {
+        navbar.classList.remove("navbar-scrolled");
+      }
+    });
+  }
+});
 
 const chatBody = document.querySelector(".chat-body");
 const messageInput = document.querySelector(".message-input");
@@ -74,28 +93,58 @@ const createMessageElement = (content, ...classes) => {
   return div;
 };
 // Generate bot response using API
-import { askGithubModel } from './modules/github-api.js';
+import { askGithubModel } from "./modules/github-api.js";
 
 const generateBotResponse = async (incomingMessageDiv) => {
-    const messageElement = incomingMessageDiv.querySelector(".message-text");
+  const messageElement = incomingMessageDiv.querySelector(".message-text");
 
-    try {
-        const reply = await askGithubModel(userData.message);
-        messageElement.innerText = reply;
-        chatHistory.push({
-            role: "model",
-            parts: [{ text: reply }],
-        });
-    } catch (error) {
-        console.error(error);
-        messageElement.innerText = error.message;
-        messageElement.style.color = "#ff0000";
-    } finally {
-        incomingMessageDiv.classList.remove("thinking");
-        chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: "smooth" });
-    }
-  };
+  try {
+    const userQuestion = userData.message;
 
+    // 1. 先发送用户问题到本地 RAG 模型
+    const ragResponse = await fetch("http://localhost:5000/rag", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ question: userQuestion }),
+    });
+
+    const ragData = await ragResponse.json(); // 假设返回 { context: "...", question: "..." }
+
+    // 2. 把 RAG 的内容加上用户问题，一起传给 GitHub 模型
+    const combinedPrompt = `
+You are an estate assistant. Based on the context provided below, you should answer the user's question related to Sole Estate residential, keeping the tone friendly and approachable.
+
+Knowledge trained:
+${ragData.context}
+
+Question: ${ragData.question}
+
+### Instructions:
+1. Answer the question based on the knowledge trained and the chat history. Treat them as what you already know, not externally given to you.
+2. If the question is unrelated to Sole Estate residential, politely guide the user back to topics relevant to Sole Estate residential.
+3. Keep responses clear, concise, and tailored to the user's needs.
+4. Answer directly without additional phrases.
+5. Don't introduce yourself unless asked to do so.
+6. Please provide a response without using bold formatting or double asterisks. Avoid any text formatting like **this** and ensure the output is plain text.
+`;
+
+    const reply = await askGithubModel(combinedPrompt);
+    messageElement.innerText = reply;
+    chatHistory.push({
+      role: "model",
+      parts: [{ text: reply }],
+    });
+  } catch (error) {
+    console.error(error);
+    messageElement.innerText = error.message;
+    messageElement.style.color = "#ff0000";
+  } finally {
+    incomingMessageDiv.classList.remove("thinking");
+    chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: "smooth" });
+  }
+};
 
 // Handle outgoing user messages
 const handleOutgoingMessage = (e) => {
@@ -106,9 +155,17 @@ const handleOutgoingMessage = (e) => {
   fileUploadWrapper.classList.remove("file-uploaded");
   // Create and display user message
   const messageContent = `<div class="message-text"></div>
-                          ${userData.file.data ? `<img src="data:${userData.file.mime_type};base64,${userData.file.data}" class="attachment" />` : ""}`;
-  const outgoingMessageDiv = createMessageElement(messageContent, "user-message");
-  outgoingMessageDiv.querySelector(".message-text").innerText = userData.message;
+                          ${
+                            userData.file.data
+                              ? `<img src="data:${userData.file.mime_type};base64,${userData.file.data}" class="attachment" />`
+                              : ""
+                          }`;
+  const outgoingMessageDiv = createMessageElement(
+    messageContent,
+    "user-message"
+  );
+  outgoingMessageDiv.querySelector(".message-text").innerText =
+    userData.message;
   chatBody.appendChild(outgoingMessageDiv);
   chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: "smooth" });
   // Simulate bot response with thinking indicator after a delay
@@ -123,7 +180,11 @@ const handleOutgoingMessage = (e) => {
               <div class="dot"></div>
             </div>
           </div>`;
-    const incomingMessageDiv = createMessageElement(messageContent, "bot-message", "thinking");
+    const incomingMessageDiv = createMessageElement(
+      messageContent,
+      "bot-message",
+      "thinking"
+    );
     chatBody.appendChild(incomingMessageDiv);
     chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: "smooth" });
     generateBotResponse(incomingMessageDiv);
@@ -133,12 +194,18 @@ const handleOutgoingMessage = (e) => {
 messageInput.addEventListener("input", () => {
   messageInput.style.height = `${initialInputHeight}px`;
   messageInput.style.height = `${messageInput.scrollHeight}px`;
-  document.querySelector(".chat-form").style.borderRadius = messageInput.scrollHeight > initialInputHeight ? "15px" : "32px";
+  document.querySelector(".chat-form").style.borderRadius =
+    messageInput.scrollHeight > initialInputHeight ? "15px" : "32px";
 });
 // Handle Enter key press for sending messages
 messageInput.addEventListener("keydown", (e) => {
   const userMessage = e.target.value.trim();
-  if (e.key === "Enter" && !e.shiftKey && userMessage && window.innerWidth > 768) {
+  if (
+    e.key === "Enter" &&
+    !e.shiftKey &&
+    userMessage &&
+    window.innerWidth > 768
+  ) {
     handleOutgoingMessage(e);
   }
 });
@@ -185,6 +252,12 @@ const picker = new EmojiMart.Picker({
 });
 document.querySelector(".chat-form").appendChild(picker);
 sendMessage.addEventListener("click", (e) => handleOutgoingMessage(e));
-document.querySelector("#file-upload").addEventListener("click", () => fileInput.click());
-closeChatbot.addEventListener("click", () => document.body.classList.remove("show-chatbot"));
-chatbotToggler.addEventListener("click", () => document.body.classList.toggle("show-chatbot"));
+document
+  .querySelector("#file-upload")
+  .addEventListener("click", () => fileInput.click());
+closeChatbot.addEventListener("click", () =>
+  document.body.classList.remove("show-chatbot")
+);
+chatbotToggler.addEventListener("click", () =>
+  document.body.classList.toggle("show-chatbot")
+);

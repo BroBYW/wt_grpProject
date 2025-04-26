@@ -3,7 +3,7 @@
 @import "bootstrap-icons/font/bootstrap-icons.css";
 
 // Custom Variables
-$primary: #2c3e50;
+$primary: #2c4886;
 $secondary: #34495e;
 $success: #27ae60;
 $info: #3498db;
@@ -55,6 +55,176 @@ body {
     }
 }
 
+// Calculator Section Styles
+.calculator-section {
+    background-color: #ECEEFF;
+    
+    .calculator-form {
+        border-radius: 12px;
+        border: none;
+        transition: all 0.3s ease;
+        
+        &:hover {
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: #445;
+        }
+        
+        .input-group {
+            .input-group-text {
+                background-color: #f8f9fa;
+                border-right: none;
+            }
+            
+            .form-control {
+                border-left: none;
+                padding-left: 0;
+                
+                &:focus {
+                    box-shadow: none;
+                    border-color: #ced4da;
+                }
+            }
+        }
+        
+        .btn-primary {
+            font-weight: 600;
+            transition: all 0.3s ease;
+            
+            &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(44, 72, 134, 0.2);
+            }
+        }
+        
+        small.text-muted {
+            font-size: 0.8rem;
+        }
+    }
+    
+    .calculator-results {
+        border-radius: 12px;
+        border: none;
+        transition: all 0.3s ease;
+        
+        .result-item {
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            
+            &:hover {
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            }
+            
+            h5 {
+                font-size: 0.9rem;
+                font-weight: 600;
+            }
+            
+            p {
+                margin-bottom: 0.25rem;
+            }
+        }
+        
+        .payment-breakdown {
+            .progress {
+                border-radius: 8px;
+                overflow: hidden;
+                
+                .progress-bar {
+                    font-weight: 600;
+                    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+                }
+            }
+        }
+        
+        .amortization-chart {
+            .nav-tabs {
+                border-bottom: none;
+                
+                .nav-link {
+                    font-weight: 500;
+                    color: #555;
+                    border-radius: 8px 8px 0 0;
+                    
+                    &.active {
+                        color: $primary;
+                        font-weight: 600;
+                        border-color: #dee2e6 #dee2e6 #fff;
+                    }
+                }
+            }
+            
+            .tab-content {
+                background-color: #fff;
+            }
+        }
+    }
+    
+    .calculator-tips {
+        border-radius: 12px;
+        border: none;
+        background-color: #f8fffa;
+        
+        .tip-item {
+            border-bottom: 1px dashed #e9ecef;
+            padding-bottom: 1rem;
+            
+            &:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+            
+            h5 {
+                font-size: 1rem;
+                font-weight: 600;
+                color: #333;
+                display: flex;
+                align-items: center;
+            }
+            
+            p {
+                margin-left: 2rem;
+                font-size: 0.9rem;
+                color: #555;
+            }
+        }
+    }
+}
+
+// Page Headers
+.page-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 1px solid #e9ecef;
+    
+    h1 {
+        color: $primary;
+        font-weight: 700;
+    }
+    
+    .lead {
+        color: #555;
+    }
+}
+
+// Animation for calculator
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.result-item, .payment-breakdown, .amortization-chart {
+    animation: slideUp 0.5s ease forwards;
+}
+
 // Footer
 .footer {
     .social-links {
@@ -75,6 +245,16 @@ body {
     }
     .feature-card {
         margin-bottom: 1rem;
+    }
+    
+    .calculator-section {
+        .calculator-form, .calculator-results, .calculator-tips {
+            margin-bottom: 1.5rem;
+        }
+        
+        .result-item {
+            margin-bottom: 1rem !important;
+        }
     }
 }
 
@@ -471,4 +651,28 @@ em-emoji-picker {
       opacity: 0;
     }
   }
+}
+
+// Hero Calculator Styles
+.hero-calculator {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/src/assets/images/bgr_caculatorPage.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    padding: 60px 0;
+
+    h1 {
+        font-weight: 700;
+        margin-bottom: 20px;
+        font-size: 3rem;
+    }
+
+    p {
+        font-size: 1.2rem;
+    }
 }

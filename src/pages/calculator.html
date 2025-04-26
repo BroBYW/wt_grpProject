@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mortgage Calculator - SoleEstate</title>
     <link rel="stylesheet" href="/src/styles/main.scss">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.css">
 </head>
+
 <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-white">
@@ -21,90 +24,225 @@
                     <li class="nav-item"><a class="nav-link" href="/src/pages/gallery.html">Gallery</a></li>
                     <li class="nav-item"><a class="nav-link" href="/src/pages/concept.html">Concept</a></li>
                     <li class="nav-item"><a class="nav-link" href="/src/pages/contact.html">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="/src/pages/calculator.html">Calculator</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/src/pages/calculator.html">Calculator</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <!-- Calculator Header -->
-    <section class="page-header py-5 mt-5">
+    <section class="hero-calculator">
         <div class="container">
-            <h1 class="display-4 fw-bold">Mortgage Calculator</h1>
-            <p class="lead">Plan your investment with our easy-to-use mortgage calculator</p>
+            <div class="row">
+                <div class="col-lg-6">
+                    <h1>Mortgage Calculator</h1>
+                    <p>Plan your investment accurately and calculate monthly payments and total expenses</p>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Calculator Section -->
-    <section class="calculator-section py-5">
+    <section class="calculator-section py-5" id="learn-more">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="calculator-form card p-4">
+            <div class="row g-4">
+                <div class="col-lg-5">
+                    <div class="calculator-form card shadow-sm p-4">
+                        <h4 class="mb-4 text-primary">Mortgage Information</h4>
                         <form id="mortgageCalculator">
                             <div class="mb-3">
-                                <label for="loanAmount" class="form-label">Loan Amount ($)</label>
-                                <input type="number" class="form-control" id="loanAmount" required min="1000">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="interestRate" class="form-label">Interest Rate (%)</label>
-                                <input type="number" class="form-control" id="interestRate" required min="0.1" step="0.1">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="loanTenure" class="form-label">Loan Tenure (Years)</label>
-                                <select class="form-select" id="loanTenure" required>
-                                    <option value="5">5 Years</option>
-                                    <option value="10">10 Years</option>
-                                    <option value="15">15 Years</option>
-                                    <option value="20">20 Years</option>
-                                    <option value="30">30 Years</option>
-                                </select>
+                                <label for="propertyValue" class="form-label">Property Value ($)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-house"></i></span>
+                                    <input type="number" class="form-control" id="propertyValue" required min="50000"
+                                        placeholder="e.g., 300,000" value="0">
+                                    <div class="invalid-feedback">Please enter at least $50,000 for property value</div>
+                                </div>
+                                <input type="range" class="form-range mt-2" id="propertyValueSlider" min="50000"
+                                    max="1000000" step="10000" value="50000">
+                                <small class="text-muted">Enter the total value of the property you're
+                                    purchasing</small>
                             </div>
 
                             <div class="mb-3">
                                 <label for="downPayment" class="form-label">Down Payment ($)</label>
-                                <input type="number" class="form-control" id="downPayment" min="0">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-cash"></i></span>
+                                    <input type="number" class="form-control" id="downPayment" min="0"
+                                        placeholder="e.g., 60,000" value="0">
+                                </div>
+                                <input type="range" class="form-range mt-2" id="downPaymentSlider" min="0" max="300000"
+                                    step="5000" value="0">
+                                <small class="text-muted">Recommended at least 20% of property value</small>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Calculate EMI</button>
+                            <div class="mb-3">
+                                <label for="loanAmount" class="form-label">Loan Amount ($)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
+                                    <input type="number" class="form-control" id="loanAmount" required min="1000"
+                                        placeholder="e.g., 240,000" value="0" readonly>
+                                </div>
+                                <small class="text-muted">Auto-calculated: Property Value - Down Payment = Loan
+                                    Amount</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="interestRate" class="form-label">Annual Interest Rate (%)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-percent"></i></span>
+                                    <input type="number" class="form-control" id="interestRate" required min="0.1"
+                                        max="20" step="0.1" placeholder="e.g., 4.5" value="0.1">
+                                </div>
+                                <input type="range" class="form-range mt-2" id="interestRateSlider" min="0.1" max="20"
+                                    step="0.1" value="0.1">
+                                <div class="form-text">
+                                    <span class="text-muted">Current market reference rates: </span>
+                                    <span class="text-primary fw-semibold">4.25% - 5.75%</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="loanTenure" class="form-label">Loan Term (Years)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                                    <select class="form-select" id="loanTenure" required>
+                                        <option value="5" selected>5 Years</option>
+                                        <option value="10">10 Years</option>
+                                        <option value="15">15 Years</option>
+                                        <option value="20">20 Years</option>
+                                        <option value="25">25 Years</option>
+                                        <option value="30">30 Years</option>
+                                    </select>
+                                </div>
+                                <input type="range" class="form-range mt-2" id="loanTenureSlider" min="5" max="30"
+                                    step="5" value="5">
+                                <small class="text-muted">Longer terms mean lower monthly payments but higher total
+                                    interest</small>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">Calculate Mortgage</button>
+                                <button type="button" id="resetButton" class="btn btn-outline-secondary">Reset</button>
+                            </div>
                         </form>
                     </div>
                 </div>
 
-                <div class="col-lg-6">
-                    <div class="calculator-results card p-4" id="calculatorResults" style="display: none;">
-                        <h3 class="mb-4">Loan Summary</h3>
-                        
-                        <div class="result-item mb-3">
-                            <h5>Monthly Payment (EMI)</h5>
-                            <p class="h3 text-primary" id="monthlyPayment">$0</p>
+                <div class="col-lg-7">
+                    <div class="calculator-results card shadow-sm p-4 mb-4" id="calculatorResults">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="m-0 text-primary">Loan Summary</h4>
+                            <button class="btn btn-sm btn-outline-primary" id="saveResults">
+                                <i class="bi bi-download me-1"></i> Save Results
+                            </button>
                         </div>
 
-                        <div class="result-item mb-3">
-                            <h5>Total Interest Payable</h5>
-                            <p class="h4" id="totalInterest">$0</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="result-item mb-4 p-3 border rounded bg-light">
+                                    <h5 class="text-secondary mb-2">EMI (Equated Monthly Installment)</h5>
+                                    <p class="h2 fw-bold text-primary" id="monthlyPayment">$0</p>
+                                    <small class="text-muted">Fixed monthly payment amount throughout loan term</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="result-item mb-4 p-3 border rounded bg-light">
+                                    <h5 class="text-secondary mb-2">Total Payment</h5>
+                                    <p class="h3 fw-bold" id="totalAmount">$0</p>
+                                    <small class="text-muted">Including principal and interest</small>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="result-item mb-3">
-                            <h5>Total Amount Payable</h5>
-                            <p class="h4" id="totalAmount">$0</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="result-item mb-4 p-3 border rounded bg-light">
+                                    <h5 class="text-secondary mb-2">Total Interest</h5>
+                                    <p class="h3 fw-bold text-info" id="totalInterest">$0</p>
+                                    <small class="text-muted">Interest paid over the loan term</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="result-item mb-4 p-3 border rounded bg-light">
+                                    <h5 class="text-secondary mb-2">Principal</h5>
+                                    <p class="h3 fw-bold text-success" id="principalAmount">$0</p>
+                                    <small class="text-muted">The amount you borrowed</small>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="amortization-summary mt-4">
-                            <h4 class="mb-3">Payment Breakdown</h4>
-                            <div class="progress" style="height: 25px;">
-                                <div class="progress-bar" role="progressbar" id="principalBar"
-                                     style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+                        <div class="payment-breakdown mb-4">
+                            <h5 class="text-secondary mb-3">Payment Breakdown</h5>
+                            <div class="progress" style="height: 30px;">
+                                <div class="progress-bar bg-success" role="progressbar" id="principalBar"
+                                    style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
                                     Principal
                                 </div>
                                 <div class="progress-bar bg-info" role="progressbar" id="interestBar"
-                                     style="width: 40%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
+                                    style="width: 40%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
                                     Interest
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Add Charts -->
+                        <div class="amortization-chart mt-4">
+                            <h5 class="text-secondary mb-3">Loan Analysis</h5>
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="chart-tab" data-bs-toggle="tab"
+                                        data-bs-target="#chart" type="button" role="tab" aria-controls="chart"
+                                        aria-selected="true">EMI Breakdown Chart</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="comparison-tab" data-bs-toggle="tab"
+                                        data-bs-target="#comparison" type="button" role="tab" aria-controls="comparison"
+                                        aria-selected="false">Term Comparison</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content p-3 border border-top-0 rounded-bottom" id="myTabContent">
+                                <div class="tab-pane fade show active" id="chart" role="tabpanel"
+                                    aria-labelledby="chart-tab">
+                                    <canvas id="amortizationChart" height="250"></canvas>
+                                </div>
+                                <div class="tab-pane fade" id="comparison" role="tabpanel"
+                                    aria-labelledby="comparison-tab">
+                                    <canvas id="tenureComparisonChart" height="250"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mortgage Tips Section -->
+    <section class="tips-section py-5 bg-light">
+        <div class="container">
+            <h2 class="text-primary mb-4">Mortgage Tips</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <h3><i class="bi bi-lightbulb text-warning me-2"></i>How to Lower Your EMI</h3>
+                        <p>Extending your loan term can lower your EMI (monthly payment) but will increase your total
+                            interest. Increasing your down payment will also reduce monthly installments.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <h3><i class="bi bi-graph-up text-success me-2"></i>Optimal Down Payment</h3>
+                        <p>It's generally recommended to put down at least 20% to avoid private mortgage insurance costs
+                            and secure better interest rates.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <h3><i class="bi bi-shield-check text-primary me-2"></i>Loan Qualification</h3>
+                        <p>A good credit score and stable income are key to getting favorable mortgage rates. Generally,
+                            your monthly payment should not exceed 28% of your monthly income.</p>
                     </div>
                 </div>
             </div>
@@ -146,58 +284,189 @@
         </div>
     </footer>
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
     <button id="chatbot-toggler">
         <span class="material-symbols-rounded">smart_toy</span>
         <span class="material-symbols-rounded">close</span>
-      </button>
-      <div class="chatbot-popup">
+    </button>
+    <div class="chatbot-popup">
         <div class="chat-header">
             <div class="header-info">
-              <svg class="chatbot-logo" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 1024 1024">
-                <path
-                  d="M738.3 287.6H285.7c-59 0-106.8 47.8-106.8 106.8v303.1c0 59 47.8 106.8 106.8 106.8h81.5v111.1c0 .7.8 1.1 1.4.7l166.9-110.6 41.8-.8h117.4l43.6-.4c59 0 106.8-47.8 106.8-106.8V394.5c0-59-47.8-106.9-106.8-106.9zM351.7 448.2c0-29.5 23.9-53.5 53.5-53.5s53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5-53.5-23.9-53.5-53.5zm157.9 267.1c-67.8 0-123.8-47.5-132.3-109h264.6c-8.6 61.5-64.5 109-132.3 109zm110-213.7c-29.5 0-53.5-23.9-53.5-53.5s23.9-53.5 53.5-53.5 53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5zM867.2 644.5V453.1h26.5c19.4 0 35.1 15.7 35.1 35.1v121.1c0 19.4-15.7 35.1-35.1 35.1h-26.5zM95.2 609.4V488.2c0-19.4 15.7-35.1 35.1-35.1h26.5v191.3h-26.5c-19.4 0-35.1-15.7-35.1-35.1zM561.5 149.6c0 23.4-15.6 43.3-36.9 49.7v44.9h-30v-44.9c-21.4-6.5-36.9-26.3-36.9-49.7 0-28.6 23.3-51.9 51.9-51.9s51.9 23.3 51.9 51.9z"
-                />
-              </svg>
-              <h2 class="logo-text">Chatbot</h2>
+                <svg class="chatbot-logo" xmlns="http://www.w3.org/2000/svg" width="50" height="50"
+                    viewBox="0 0 1024 1024">
+                    <path
+                        d="M738.3 287.6H285.7c-59 0-106.8 47.8-106.8 106.8v303.1c0 59 47.8 106.8 106.8 106.8h81.5v111.1c0 .7.8 1.1 1.4.7l166.9-110.6 41.8-.8h117.4l43.6-.4c59 0 106.8-47.8 106.8-106.8V394.5c0-59-47.8-106.9-106.8-106.9zM351.7 448.2c0-29.5 23.9-53.5 53.5-53.5s53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5-53.5-23.9-53.5-53.5zm157.9 267.1c-67.8 0-123.8-47.5-132.3-109h264.6c-8.6 61.5-64.5 109-132.3 109zm110-213.7c-29.5 0-53.5-23.9-53.5-53.5s23.9-53.5 53.5-53.5 53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5zM867.2 644.5V453.1h26.5c19.4 0 35.1 15.7 35.1 35.1v121.1c0 19.4-15.7 35.1-35.1 35.1h-26.5zM95.2 609.4V488.2c0-19.4 15.7-35.1 35.1-35.1h26.5v191.3h-26.5c-19.4 0-35.1-15.7-35.1-35.1zM561.5 149.6c0 23.4-15.6 43.3-36.9 49.7v44.9h-30v-44.9c-21.4-6.5-36.9-26.3-36.9-49.7 0-28.6 23.3-51.9 51.9-51.9s51.9 23.3 51.9 51.9z" />
+                </svg>
+                <h2 class="logo-text">Chatbot</h2>
             </div>
             <button id="close-chatbot" class="material-symbols-rounded">keyboard_arrow_down</button>
-          </div>
-          <!-- Chatbot Body -->
-          <div class="chat-body">
+        </div>
+        <!-- Chatbot Body -->
+        <div class="chat-body">
             <div class="message bot-message">
-              <svg class="bot-avatar" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 1024 1024">
-                <path
-                  d="M738.3 287.6H285.7c-59 0-106.8 47.8-106.8 106.8v303.1c0 59 47.8 106.8 106.8 106.8h81.5v111.1c0 .7.8 1.1 1.4.7l166.9-110.6 41.8-.8h117.4l43.6-.4c59 0 106.8-47.8 106.8-106.8V394.5c0-59-47.8-106.9-106.8-106.9zM351.7 448.2c0-29.5 23.9-53.5 53.5-53.5s53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5-53.5-23.9-53.5-53.5zm157.9 267.1c-67.8 0-123.8-47.5-132.3-109h264.6c-8.6 61.5-64.5 109-132.3 109zm110-213.7c-29.5 0-53.5-23.9-53.5-53.5s23.9-53.5 53.5-53.5 53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5zM867.2 644.5V453.1h26.5c19.4 0 35.1 15.7 35.1 35.1v121.1c0 19.4-15.7 35.1-35.1 35.1h-26.5zM95.2 609.4V488.2c0-19.4 15.7-35.1 35.1-35.1h26.5v191.3h-26.5c-19.4 0-35.1-15.7-35.1-35.1zM561.5 149.6c0 23.4-15.6 43.3-36.9 49.7v44.9h-30v-44.9c-21.4-6.5-36.9-26.3-36.9-49.7 0-28.6 23.3-51.9 51.9-51.9s51.9 23.3 51.9 51.9z"
-                />
-              </svg>
-              <!-- prettier-ignore -->
-              <div class="message-text"> Hey there  <br /> How can I help you today? </div>
+                <svg class="bot-avatar" xmlns="http://www.w3.org/2000/svg" width="50" height="50"
+                    viewBox="0 0 1024 1024">
+                    <path
+                        d="M738.3 287.6H285.7c-59 0-106.8 47.8-106.8 106.8v303.1c0 59 47.8 106.8 106.8 106.8h81.5v111.1c0 .7.8 1.1 1.4.7l166.9-110.6 41.8-.8h117.4l43.6-.4c59 0 106.8-47.8 106.8-106.8V394.5c0-59-47.8-106.9-106.8-106.9zM351.7 448.2c0-29.5 23.9-53.5 53.5-53.5s53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5-53.5-23.9-53.5-53.5zm157.9 267.1c-67.8 0-123.8-47.5-132.3-109h264.6c-8.6 61.5-64.5 109-132.3 109zm110-213.7c-29.5 0-53.5-23.9-53.5-53.5s23.9-53.5 53.5-53.5 53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5zM867.2 644.5V453.1h26.5c19.4 0 35.1 15.7 35.1 35.1v121.1c0 19.4-15.7 35.1-35.1 35.1h-26.5zM95.2 609.4V488.2c0-19.4 15.7-35.1 35.1-35.1h26.5v191.3h-26.5c-19.4 0-35.1-15.7-35.1-35.1zM561.5 149.6c0 23.4-15.6 43.3-36.9 49.7v44.9h-30v-44.9c-21.4-6.5-36.9-26.3-36.9-49.7 0-28.6 23.3-51.9 51.9-51.9s51.9 23.3 51.9 51.9z" />
+                </svg>
+                <!-- prettier-ignore -->
+                <div class="message-text">Hey there!<br />How can I help you today?</div>
             </div>
-          </div>
-          <!-- Chatbot Footer -->
-          <div class="chat-footer">
+        </div>
+        <!-- Chatbot Footer -->
+        <div class="chat-footer">
             <form action="#" class="chat-form">
-              <textarea placeholder="Message..." class="message-input" required></textarea>
-              <div class="chat-controls">
-                <button type="button" id="emoji-picker" class="material-symbols-outlined">sentiment_satisfied</button>
-                <div class="file-upload-wrapper">
-                  <input type="file" accept="image/*" id="file-input" hidden />
-                  <img src="#" />
-                  <button type="button" id="file-upload" class="material-symbols-rounded">attach_file</button>
-                  <button type="button" id="file-cancel" class="material-symbols-rounded">close</button>
+                <textarea placeholder="Message..." class="message-input" required></textarea>
+                <div class="chat-controls">
+                    <button type="button" id="emoji-picker"
+                        class="material-symbols-outlined">sentiment_satisfied</button>
+                    <div class="file-upload-wrapper">
+                        <input type="file" accept="image/*" id="file-input" hidden />
+                        <img src="#" />
+                        <button type="button" id="file-upload" class="material-symbols-rounded">attach_file</button>
+                        <button type="button" id="file-cancel" class="material-symbols-rounded">close</button>
+                    </div>
+                    <button type="submit" id="send-message" class="material-symbols-rounded">arrow_upward</button>
                 </div>
-                <button type="submit" id="send-message" class="material-symbols-rounded">arrow_upward</button>
-              </div>
             </form>
-          </div>
-      </div>
-  
-      <!-- Additional Scripts -->
-      <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
-      <script src="main.js"></script>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Ensure Chart.js library is loaded correctly -->
+    <script>
+        // Define fallback function to handle Chart.js loading issues
+        window.handleChartError = function () {
+            console.error("Failed to load Chart.js from CDN, attempting to use local fallback");
+            var fallbackScript = document.createElement('script');
+            fallbackScript.src = '/src/js/vendor/chart.min.js'; // Fallback path
+            fallbackScript.onerror = function () {
+                console.error("Local Chart.js fallback also failed");
+                // Define a minimal Chart replacement to prevent errors
+                window.Chart = function () {
+                    console.warn("Using Chart stub implementation");
+                    return {
+                        destroy: function () { console.log("Chart stub destroy called"); },
+                        update: function () { console.log("Chart stub update called"); }
+                    };
+                };
+            };
+            document.head.appendChild(fallbackScript);
+        };
+    </script>
+
+    <!-- Primary Chart.js from CDN with error handling -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"
+        onerror="window.handleChartError()"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
+
+    <!-- Add debug code to check if Chart is properly loaded -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            // Check if Chart.js loaded correctly
+            if (typeof Chart === 'undefined') {
+                console.error("Chart is not defined after loading scripts");
+                window.handleChartError();
+            } else {
+                console.log('Chart.js loaded successfully:', typeof Chart);
+            }
+
+            // Set initial state for all input fields and results
+            function initializeCalculator() {
+                // Ensure all fields are properly reset to minimum values
+
+                // Reset progress bars
+                document.getElementById('principalBar').style.width = "50%";
+                document.getElementById('principalBar').setAttribute('aria-valuenow', 50);
+                document.getElementById('principalBar').textContent = "Principal 50%";
+
+                document.getElementById('interestBar').style.width = "50%";
+                document.getElementById('interestBar').setAttribute('aria-valuenow', 50);
+                document.getElementById('interestBar').textContent = "Interest 50%";
+
+                // Reset result values
+                document.getElementById('monthlyPayment').textContent = "$0";
+                document.getElementById('totalAmount').textContent = "$0";
+                document.getElementById('totalInterest').textContent = "$0";
+                document.getElementById('principalAmount').textContent = "$0";
+
+                console.log('Calculator initialized with all values reset to minimum defaults');
+            }
+
+            // Initialize calculator with default values
+            var calculatorForm = document.getElementById('mortgageCalculator');
+            if (calculatorForm) {
+                // Initialize all fields 
+                initializeCalculator();
+
+                calculatorForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    console.log('Form submitted');
+                    // The actual calculation is handled by calculator.js
+                });
+
+                // Reset button functionality - set all inputs to zero/default values
+                document.getElementById('resetButton').addEventListener('click', function () {
+                    console.log('Reset button clicked');
+
+                    // Reset property value
+                    document.getElementById('propertyValue').value = "0";
+                    document.getElementById('propertyValueSlider').value = "50000";
+
+                    // Reset down payment
+                    document.getElementById('downPayment').value = "0";
+                    document.getElementById('downPaymentSlider').value = "0";
+
+                    // Reset loan amount
+                    document.getElementById('loanAmount').value = "0";
+
+                    // Reset interest rate
+                    document.getElementById('interestRate').value = "0.1";
+                    document.getElementById('interestRateSlider').value = "0.1";
+
+                    // Reset loan tenure
+                    document.getElementById('loanTenure').value = "5";
+                    document.getElementById('loanTenureSlider').value = "5";
+
+                    // Reset results display
+                    document.getElementById('monthlyPayment').textContent = "$0";
+                    document.getElementById('totalAmount').textContent = "$0";
+                    document.getElementById('totalInterest').textContent = "$0";
+                    document.getElementById('principalAmount').textContent = "$0";
+
+                    // Reset progress bars
+                    document.getElementById('principalBar').style.width = "50%";
+                    document.getElementById('principalBar').setAttribute('aria-valuenow', 50);
+                    document.getElementById('principalBar').textContent = "Principal 50%";
+
+                    document.getElementById('interestBar').style.width = "50%";
+                    document.getElementById('interestBar').setAttribute('aria-valuenow', 50);
+                    document.getElementById('interestBar').textContent = "Interest 50%";
+
+                    // Try to reset charts if they exist
+                    try {
+                        if (window.amortizationChart && typeof window.amortizationChart.destroy === 'function') {
+                            window.amortizationChart.destroy();
+                        }
+                        if (window.tenureComparisonChart && typeof window.tenureComparisonChart.destroy === 'function') {
+                            window.tenureComparisonChart.destroy();
+                        }
+                    } catch (error) {
+                        console.error('Error resetting charts:', error);
+                    }
+
+                    console.log('All fields reset to zero/default values');
+                });
+            } else {
+                console.warn('Calculator form not found');
+            }
+        });
+    </script>
 
     <script type="module" src="/src/js/main.js"></script>
 </body>
+
 </html>
