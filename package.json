@@ -9,13 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@azure-rest/ai-inference": "^1.0.0-beta.6",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.5",
     "bootstrap-icons": "^1.11.3",
     "lightgallery": "^2.7.2"
   },
   "devDependencies": {
-    "sass": "^1.86.3",
+    "sass": "^1.32.13",
     "vite": "^5.4.18"
   }
 }
