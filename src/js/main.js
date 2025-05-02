@@ -261,3 +261,26 @@ closeChatbot.addEventListener("click", () =>
 chatbotToggler.addEventListener("click", () =>
   document.body.classList.toggle("show-chatbot")
 );
+// Contact Form Handling
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Form validation
+    if (this.checkValidity()) {
+        // Hide form
+        this.style.display = 'none';
+        
+        // Show success message
+        const successMessage = document.getElementById('successMessage');
+        successMessage.style.display = 'block';
+        
+        // Reset form after 3 seconds
+        setTimeout(() => {
+            this.reset();
+            this.style.display = 'block';
+            successMessage.style.display = 'none';
+        }, 3000);
+    }
+    
+    this.classList.add('was-validated');
+}, false);
