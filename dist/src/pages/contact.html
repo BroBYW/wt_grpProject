@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - SoleEstate</title>
-  <script type="module" crossorigin src="/assets/main-DE9bKoup.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/main-CEYrePVv.css">
+    <title>Contact Us - SoleEstate</title>
+  <script type="module" crossorigin src="/assets/main-BuOqjwe7.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/main-CV2fobb1.css">
 </head>
+
 <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-white">
@@ -29,10 +31,14 @@
     </nav>
 
     <!-- Contact Header -->
-    <section class="page-header py-5 mt-5">
+    <section class="hero-contact">
         <div class="container">
-            <h1 class="display-4 fw-bold">Contact Us</h1>
-            <p class="lead">Get in touch to learn more about your future home</p>
+            <div class="row">
+                <div class="col-lg-6">
+                    <h1>Contact Us</h1>
+                    <p>We’re here to help you find your dream home.</p>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -41,33 +47,40 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
-                    <form id="contactForm" class="needs-validation" novalidate>
+                    <form id="contactForm" class="needs-validation shadow p-4 rounded bg-white" style="width: 100%;"
+                        novalidate>
                         <div class="mb-3">
-                            <label for="name" class="form-label">Full Name *</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
+                            <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="name" name="name" required
+                                placeholder="Enter your full name">
                             <div class="invalid-feedback">
                                 Please enter your name
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email Address *</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
+                            <label for="email" class="form-label">Email Address <span
+                                    class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="email" name="email" required
+                                placeholder="Enter your email address">
                             <div class="invalid-feedback">
                                 Please enter a valid email address
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="phone" class="form-label">Phone Number *</label>
-                            <input type="tel" class="form-control" id="phone" name="phone" required>
+                            <label for="phone" class="form-label">Phone Number <span
+                                    class="text-danger">*</span></label>
+                            <input type="tel" class="form-control" id="phone" name="phone" maxlength="10" required
+                                placeholder="Enter your phone number">
                             <div class="invalid-feedback">
                                 Please enter your phone number
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="unitType" class="form-label">Preferred Unit Type *</label>
+                            <label for="unitType" class="form-label">Preferred Unit Type <span
+                                    class="text-danger">*</span></label>
                             <select class="form-select" id="unitType" name="unitType" required>
                                 <option value="">Select a unit type</option>
                                 <option value="1bhk">1 BHK</option>
@@ -80,27 +93,29 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="message" class="form-label">Message *</label>
-                            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                            <label for="message" class="form-label">Message <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="message" name="message" rows="4" required
+                                placeholder="Write your message here"></textarea>
                             <div class="invalid-feedback">
                                 Please enter your message
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Send Message</button>
+                        <button type="submit" class="btn btn-primary w-100 py-2">Send Message</button>
                     </form>
 
                     <!-- Success Message -->
-                    <div id="successMessage" class="alert alert-success mt-3" style="display: none;">
+                    <div id="successMessage" class="alert alert-success mt-3" style="display: none; width: 100%;">
                         Thank you for your interest! We'll get back to you soon.
                     </div>
                 </div>
 
                 <div class="col-lg-6">
-                    <div class="contact-info mt-5 mt-lg-0">
-                        <h3>Visit Our Office</h3>
-                        <p>Experience SoleEstate in person and discuss your future home with our experts.</p>
-                        
+                    <div class="contact-info mt-5 mt-lg-0" style="width: 100%;">
+                        <h3 class="text-primary">Visit Our Office</h3>
+                        <p class="text-secondary">Experience SoleEstate in person and discuss your future home with our
+                            experts.</p>
+
                         <div class="mb-4">
                             <h5><i class="bi bi-geo-alt me-2"></i>Location</h5>
                             <p>123 Development Street<br>City, State 12345</p>
@@ -115,19 +130,16 @@
                             <h5><i class="bi bi-telephone me-2"></i>Contact</h5>
                             <p>Phone: (123) 456-7890<br>Email: info@soleestate.com</p>
                         </div>
-
-                        <!-- Google Map -->
-                        <div class="map-container mt-4">
-                            <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d YOUR_COORDINATES"
-                                width="100%"
-                                height="300"
-                                style="border:0;"
-                                allowfullscreen=""
-                                loading="lazy">
-                            </iframe>
-                        </div>
                     </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-12">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127482.66733697947!2d101.60458727834356!3d3.1386740743806367!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cc49c701efeae7%3A0xf4d98e5b2f1c287d!2sKuala%20Lumpur%2C%20Federal%20Territory%20of%20Kuala%20Lumpur!5e0!3m2!1sen!2smy!4v1745686786480!5m2!1sen!2smy"
+                        width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
                 </div>
             </div>
         </div>
@@ -168,57 +180,61 @@
         </div>
     </footer>
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
     <button id="chatbot-toggler">
         <span class="material-symbols-rounded">smart_toy</span>
         <span class="material-symbols-rounded">close</span>
-      </button>
-      <div class="chatbot-popup">
+    </button>
+    <div class="chatbot-popup">
         <div class="chat-header">
             <div class="header-info">
-              <svg class="chatbot-logo" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 1024 1024">
-                <path
-                  d="M738.3 287.6H285.7c-59 0-106.8 47.8-106.8 106.8v303.1c0 59 47.8 106.8 106.8 106.8h81.5v111.1c0 .7.8 1.1 1.4.7l166.9-110.6 41.8-.8h117.4l43.6-.4c59 0 106.8-47.8 106.8-106.8V394.5c0-59-47.8-106.9-106.8-106.9zM351.7 448.2c0-29.5 23.9-53.5 53.5-53.5s53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5-53.5-23.9-53.5-53.5zm157.9 267.1c-67.8 0-123.8-47.5-132.3-109h264.6c-8.6 61.5-64.5 109-132.3 109zm110-213.7c-29.5 0-53.5-23.9-53.5-53.5s23.9-53.5 53.5-53.5 53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5zM867.2 644.5V453.1h26.5c19.4 0 35.1 15.7 35.1 35.1v121.1c0 19.4-15.7 35.1-35.1 35.1h-26.5zM95.2 609.4V488.2c0-19.4 15.7-35.1 35.1-35.1h26.5v191.3h-26.5c-19.4 0-35.1-15.7-35.1-35.1zM561.5 149.6c0 23.4-15.6 43.3-36.9 49.7v44.9h-30v-44.9c-21.4-6.5-36.9-26.3-36.9-49.7 0-28.6 23.3-51.9 51.9-51.9s51.9 23.3 51.9 51.9z"
-                />
-              </svg>
-              <h2 class="logo-text">Chatbot</h2>
+                <svg class="chatbot-logo" xmlns="http://www.w3.org/2000/svg" width="50" height="50"
+                    viewBox="0 0 1024 1024">
+                    <path
+                        d="M738.3 287.6H285.7c-59 0-106.8 47.8-106.8 106.8v303.1c0 59 47.8 106.8 106.8 106.8h81.5v111.1c0 .7.8 1.1 1.4.7l166.9-110.6 41.8-.8h117.4l43.6-.4c59 0 106.8-47.8 106.8-106.8V394.5c0-59-47.8-106.9-106.8-106.9zM351.7 448.2c0-29.5 23.9-53.5 53.5-53.5s53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5-53.5-23.9-53.5-53.5zm157.9 267.1c-67.8 0-123.8-47.5-132.3-109h264.6c-8.6 61.5-64.5 109-132.3 109zm110-213.7c-29.5 0-53.5-23.9-53.5-53.5s23.9-53.5 53.5-53.5 53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5zM867.2 644.5V453.1h26.5c19.4 0 35.1 15.7 35.1 35.1v121.1c0 19.4-15.7 35.1-35.1 35.1h-26.5zM95.2 609.4V488.2c0-19.4 15.7-35.1 35.1-35.1h26.5v191.3h-26.5c-19.4 0-35.1-15.7-35.1-35.1zM561.5 149.6c0 23.4-15.6 43.3-36.9 49.7v44.9h-30v-44.9c-21.4-6.5-36.9-26.3-36.9-49.7 0-28.6 23.3-51.9 51.9-51.9s51.9 23.3 51.9 51.9z" />
+                </svg>
+                <h2 class="logo-text">Chatbot</h2>
             </div>
             <button id="close-chatbot" class="material-symbols-rounded">keyboard_arrow_down</button>
-          </div>
-          <!-- Chatbot Body -->
-          <div class="chat-body">
+        </div>
+        <!-- Chatbot Body -->
+        <div class="chat-body">
             <div class="message bot-message">
-              <svg class="bot-avatar" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 1024 1024">
-                <path
-                  d="M738.3 287.6H285.7c-59 0-106.8 47.8-106.8 106.8v303.1c0 59 47.8 106.8 106.8 106.8h81.5v111.1c0 .7.8 1.1 1.4.7l166.9-110.6 41.8-.8h117.4l43.6-.4c59 0 106.8-47.8 106.8-106.8V394.5c0-59-47.8-106.9-106.8-106.9zM351.7 448.2c0-29.5 23.9-53.5 53.5-53.5s53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5-53.5-23.9-53.5-53.5zm157.9 267.1c-67.8 0-123.8-47.5-132.3-109h264.6c-8.6 61.5-64.5 109-132.3 109zm110-213.7c-29.5 0-53.5-23.9-53.5-53.5s23.9-53.5 53.5-53.5 53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5zM867.2 644.5V453.1h26.5c19.4 0 35.1 15.7 35.1 35.1v121.1c0 19.4-15.7 35.1-35.1 35.1h-26.5zM95.2 609.4V488.2c0-19.4 15.7-35.1 35.1-35.1h26.5v191.3h-26.5c-19.4 0-35.1-15.7-35.1-35.1zM561.5 149.6c0 23.4-15.6 43.3-36.9 49.7v44.9h-30v-44.9c-21.4-6.5-36.9-26.3-36.9-49.7 0-28.6 23.3-51.9 51.9-51.9s51.9 23.3 51.9 51.9z"
-                />
-              </svg>
-              <!-- prettier-ignore -->
-              <div class="message-text"> Hey there  <br /> How can I help you today? </div>
+                <svg class="bot-avatar" xmlns="http://www.w3.org/2000/svg" width="50" height="50"
+                    viewBox="0 0 1024 1024">
+                    <path
+                        d="M738.3 287.6H285.7c-59 0-106.8 47.8-106.8 106.8v303.1c0 59 47.8 106.8 106.8 106.8h81.5v111.1c0 .7.8 1.1 1.4.7l166.9-110.6 41.8-.8h117.4l43.6-.4c59 0 106.8-47.8 106.8-106.8V394.5c0-59-47.8-106.9-106.8-106.9zM351.7 448.2c0-29.5 23.9-53.5 53.5-53.5s53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5-53.5-23.9-53.5-53.5zm157.9 267.1c-67.8 0-123.8-47.5-132.3-109h264.6c-8.6 61.5-64.5 109-132.3 109zm110-213.7c-29.5 0-53.5-23.9-53.5-53.5s23.9-53.5 53.5-53.5 53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5zM867.2 644.5V453.1h26.5c19.4 0 35.1 15.7 35.1 35.1v121.1c0 19.4-15.7 35.1-35.1 35.1h-26.5zM95.2 609.4V488.2c0-19.4 15.7-35.1 35.1-35.1h26.5v191.3h-26.5c-19.4 0-35.1-15.7-35.1-35.1zM561.5 149.6c0 23.4-15.6 43.3-36.9 49.7v44.9h-30v-44.9c-21.4-6.5-36.9-26.3-36.9-49.7 0-28.6 23.3-51.9 51.9-51.9s51.9 23.3 51.9 51.9z" />
+                </svg>
+                <!-- prettier-ignore -->
+                <div class="message-text"> Hey there <br /> How can I help you today? </div>
             </div>
-          </div>
-          <!-- Chatbot Footer -->
-          <div class="chat-footer">
+        </div>
+        <!-- Chatbot Footer -->
+        <div class="chat-footer">
             <form action="#" class="chat-form">
-              <textarea placeholder="Message..." class="message-input" required></textarea>
-              <div class="chat-controls">
-                <button type="button" id="emoji-picker" class="material-symbols-outlined">sentiment_satisfied</button>
-                <div class="file-upload-wrapper">
-                  <input type="file" accept="image/*" id="file-input" hidden />
-                  <img src="#" />
-                  <button type="button" id="file-upload" class="material-symbols-rounded">attach_file</button>
-                  <button type="button" id="file-cancel" class="material-symbols-rounded">close</button>
+                <textarea placeholder="Message..." class="message-input" required></textarea>
+                <div class="chat-controls">
+                    <button type="button" id="emoji-picker"
+                        class="material-symbols-outlined">sentiment_satisfied</button>
+                    <div class="file-upload-wrapper">
+                        <input type="file" accept="image/*" id="file-input" hidden />
+                        <img src="#" />
+                        <button type="button" id="file-upload" class="material-symbols-rounded">attach_file</button>
+                        <button type="button" id="file-cancel" class="material-symbols-rounded">close</button>
+                    </div>
+                    <button type="submit" id="send-message" class="material-symbols-rounded">arrow_upward</button>
                 </div>
-                <button type="submit" id="send-message" class="material-symbols-rounded">arrow_upward</button>
-              </div>
             </form>
-          </div>
-      </div>
-  
-      <!-- Additional Scripts -->
-      <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
-      <script src="main.js"></script>
-
+        </div>
+    </div>
+
+    <!-- Additional Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
+    <script src="main.js"></script>
+
 </body>
+
 </html>

@@ -28,6 +28,26 @@ body {
     }
 }
 
+.team-card {
+  .rounded-circle {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+  }
+}
+
+.rounded-circle {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+}
+
 // Hero Section
 .hero {
     background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../assets/images/hero.jpg');
