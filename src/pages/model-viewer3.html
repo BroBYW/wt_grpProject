@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3BHK 3D Model Viewer - SoleEstate</title>
+    <link rel="stylesheet" href="../styles/main.scss">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        #model-container {
+            width: 100%;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+        
+        .controls-panel {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            width: 250px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            color: #0d6efd;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background-color: rgba(240, 240, 240, 0.9);
+        }
+        
+        @media (max-width: 768px) {
+            .controls-panel {
+                position: absolute;
+                bottom: 20px;
+                top: auto;
+                right: 20px;
+                width: calc(100% - 40px);
+                max-width: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Back Button Only -->
+    <a href="floor-plan.html" class="back-button">
+        <i class="fas fa-arrow-left"></i> Back to Floor Plans
+    </a>
+    
+    <!-- Controls Panel -->
+    <div class="controls-panel">
+        <h5 id="model-title">3BHK 3D Floor Plan</h5>
+        <div class="mb-3">
+            <label for="view-mode" class="form-label">View Mode</label>
+            <select class="form-select" id="view-mode">
+                <option value="3d">3D View</option>
+                <option value="top">Top View</option>
+                <option value="front">Front View</option>
+                <option value="side">Side View</option>
+                <option value="interior">Interior View</option>
+            </select>
+        </div>
+        <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" id="show-wireframe">
+            <label class="form-check-label" for="show-wireframe">Show Wireframe</label>
+        </div>
+        <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" id="show-interior-lights" checked>
+            <label class="form-check-label" for="show-interior-lights">Interior Lighting</label>
+        </div>
+        <div class="mb-3">
+            <label for="rotation-speed" class="form-label">Rotation Speed</label>
+            <input type="range" class="form-range" id="rotation-speed" min="0" max="5" step="0.1" value="0">
+        </div>
+        <button class="btn btn-sm btn-primary" id="reset-camera">Reset View</button>
+    </div>
+    
+    <!-- 3D Model Container -->
+    <div id="model-container"></div>
+
+    <!-- Add Three.js libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
+    
+    <!-- 3D Model Viewer Script -->
+    <script>
+        // Initialize variables for Three.js
+        let scene, camera, renderer, controls, model;
+        let rotationSpeed = 0;
+        const modelPath = '../assets/models/3bhk.glb';
+        
+        // Initialize the 3D scene
+        function initViewer() {
+            // Create scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf5f5f5);
+            
+            // Create camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(5, 5, 5);
+            
+            // Create renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            document.getElementById('model-container').appendChild(renderer.domElement);
+            
+            // Add orbit controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(5, 10, 5);
+            directionalLight.castShadow = true;
+            scene.add(directionalLight);
+            
+            // Create a simple 3D model (for when GLB isn't loaded)
+            createSimpleModel();
+            
+            // Load the GLB model
+            loadModel();
+            
+            // Handle window resize
+            window.addEventListener('resize', onWindowResize);
+            
+            // Add event listeners for controls
+            document.getElementById('view-mode').addEventListener('change', changeViewMode);
+            document.getElementById('show-wireframe').addEventListener('change', toggleWireframe);
+            document.getElementById('show-interior-lights').addEventListener('change', toggleInteriorLights);
+            document.getElementById('rotation-speed').addEventListener('input', changeRotationSpeed);
+            document.getElementById('reset-camera').addEventListener('click', resetCamera);
+            
+            // Start animation loop
+            animate();
+        }
+        
+        // Create a simple placeholder model
+        function createSimpleModel() {
+            const group = new THREE.Group();
+            scene.add(group);
+            
+            // Floor
+            const floorGeometry = new THREE.BoxGeometry(14, 0.2, 14);
+            const floorMaterial = new THREE.MeshStandardMaterial({ color: 0xeeeeee });
+            const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+            floor.position.y = -0.1;
+            floor.receiveShadow = true;
+            group.add(floor);
+            
+            // Walls
+            const wallMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
+            
+            // Outer walls
+            const outerWalls = [
+                { size: [14, 3, 0.2], position: [0, 1.5, -7] },  // North wall
+                { size: [14, 3, 0.2], position: [0, 1.5, 7] },   // South wall
+                { size: [0.2, 3, 14], position: [-7, 1.5, 0] },  // West wall
+                { size: [0.2, 3, 14], position: [7, 1.5, 0] }    // East wall
+            ];
+            
+            outerWalls.forEach(wall => {
+                const wallGeo = new THREE.BoxGeometry(...wall.size);
+                const wallMesh = new THREE.Mesh(wallGeo, wallMaterial);
+                wallMesh.position.set(...wall.position);
+                wallMesh.castShadow = true;
+                wallMesh.receiveShadow = true;
+                group.add(wallMesh);
+            });
+            
+            // Inner walls to create 3 bedrooms
+            const innerWalls = [
+                // Living room divider
+                { size: [8, 3, 0.2], position: [0, 1.5, 2] },
+                // Bedroom dividers
+                { size: [0.2, 3, 5], position: [-3, 1.5, -4.5] },
+                { size: [0.2, 3, 5], position: [3, 1.5, -4.5] },
+                // Kitchen divider
+                { size: [4, 3, 0.2], position: [5, 1.5, 2] }
+            ];
+            
+            innerWalls.forEach(wall => {
+                const wallGeo = new THREE.BoxGeometry(...wall.size);
+                const wallMesh = new THREE.Mesh(wallGeo, wallMaterial);
+                wallMesh.position.set(...wall.position);
+                wallMesh.castShadow = true;
+                wallMesh.receiveShadow = true;
+                group.add(wallMesh);
+            });
+            
+            // Living Room Furniture
+            // Sofa
+            const sofaGroup = new THREE.Group();
+            
+            // Sofa base
+            const sofaBaseGeometry = new THREE.BoxGeometry(3, 0.5, 1);
+            const sofaMaterial = new THREE.MeshStandardMaterial({ color: 0x6b8e23 });
+            const sofaBase = new THREE.Mesh(sofaBaseGeometry, sofaMaterial);
+            sofaBase.position.set(0, 0.25, 0);
+            sofaBase.castShadow = true;
+            sofaBase.receiveShadow = true;
+            sofaGroup.add(sofaBase);
+            
+            // Sofa back
+            const sofaBackGeometry = new THREE.BoxGeometry(3, 1, 0.3);
+            const sofaBack = new THREE.Mesh(sofaBackGeometry, sofaMaterial);
+            sofaBack.position.set(0, 0.75, -0.35);
+            sofaBack.castShadow = true;
+            sofaBack.receiveShadow = true;
+            sofaGroup.add(sofaBack);
+            
+            // Sofa arms
+            const sofaArmGeometry = new THREE.BoxGeometry(0.3, 0.7, 1);
+            
+            const sofaArmLeft = new THREE.Mesh(sofaArmGeometry, sofaMaterial);
+            sofaArmLeft.position.set(-1.35, 0.35, 0);
+            sofaArmLeft.castShadow = true;
+            sofaArmLeft.receiveShadow = true;
+            sofaGroup.add(sofaArmLeft);
+            
+            const sofaArmRight = new THREE.Mesh(sofaArmGeometry, sofaMaterial);
+            sofaArmRight.position.set(1.35, 0.35, 0);
+            sofaArmRight.castShadow = true;
+            sofaArmRight.receiveShadow = true;
+            sofaGroup.add(sofaArmRight);
+            
+            sofaGroup.position.set(0, 0, 4);
+            group.add(sofaGroup);
+            
+            // Coffee table
+            const tableGroup = new THREE.Group();
+            
+            // Table top
+            const tableTopGeometry = new THREE.BoxGeometry(1.5, 0.1, 0.8);
+            const tableMaterial = new THREE.MeshStandardMaterial({ color: 0x8b4513 });
+            const tableTop = new THREE.Mesh(tableTopGeometry, tableMaterial);
+            tableTop.position.set(0, 0.4, 0);
+            tableTop.castShadow = true;
+            tableTop.receiveShadow = true;
+            tableGroup.add(tableTop);
+            
+            // Table legs
+            const legGeometry = new THREE.BoxGeometry(0.1, 0.8, 0.1);
+            
+            for (let x = -0.6; x <= 0.6; x += 1.2) {
+                for (let z = -0.3; z <= 0.3; z += 0.6) {
+                    const leg = new THREE.Mesh(legGeometry, tableMaterial);
+                    leg.position.set(x, 0, z);
+                    leg.castShadow = true;
+                    leg.receiveShadow = true;
+                    tableGroup.add(leg);
+                }
+            }
+            
+            tableGroup.position.set(0, 0, 2.5);
+            group.add(tableGroup);
+            
+            // TV Unit
+            const tvUnitGroup = new THREE.Group();
+            
+            const tvStandGeometry = new THREE.BoxGeometry(2.5, 0.5, 0.8);
+            const tvStandMaterial = new THREE.MeshStandardMaterial({ color: 0x696969 });
+            const tvStand = new THREE.Mesh(tvStandGeometry, tvStandMaterial);
+            tvStand.position.set(0, 0.25, 0);
+            tvStand.castShadow = true;
+            tvStand.receiveShadow = true;
+            tvUnitGroup.add(tvStand);
+            
+            const tvGeometry = new THREE.BoxGeometry(2, 1.2, 0.1);
+            const tvMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 });
+            const tv = new THREE.Mesh(tvGeometry, tvMaterial);
+            tv.position.set(0, 1.1, 0);
+            tv.castShadow = true;
+            tv.receiveShadow = true;
+            tvUnitGroup.add(tv);
+            
+            tvUnitGroup.position.set(0, 0, 0);
+            group.add(tvUnitGroup);
+            
+            // Bedroom 1 (Master)
+            const bedroom1Group = new THREE.Group();
+            
+            // Bed
+            const bedBaseGeometry = new THREE.BoxGeometry(2, 0.3, 3);
+            const bedMaterial = new THREE.MeshStandardMaterial({ color: 0x4682b4 });
+            const bedBase = new THREE.Mesh(bedBaseGeometry, bedMaterial);
+            bedBase.position.set(0, 0.15, 0);
+            bedBase.castShadow = true;
+            bedBase.receiveShadow = true;
+            bedroom1Group.add(bedBase);
+            
+            const mattressGeometry = new THREE.BoxGeometry(1.9, 0.2, 2.9);
+            const mattressMaterial = new THREE.MeshStandardMaterial({ color: 0xf0f0f0 });
+            const mattress = new THREE.Mesh(mattressGeometry, mattressMaterial);
+            mattress.position.set(0, 0.4, 0);
+            mattress.castShadow = true;
+            mattress.receiveShadow = true;
+            bedroom1Group.add(mattress);
+            
+            const pillowGeometry = new THREE.BoxGeometry(1.4, 0.1, 0.5);
+            const pillowMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
+            const pillow = new THREE.Mesh(pillowGeometry, pillowMaterial);
+            pillow.position.set(0, 0.55, -1.1);
+            pillow.castShadow = true;
+            pillow.receiveShadow = true;
+            bedroom1Group.add(pillow);
+            
+            bedroom1Group.position.set(-5, 0, -4);
+            group.add(bedroom1Group);
+            
+            // Bedroom 2
+            const bedroom2Group = new THREE.Group();
+            
+            // Bed (smaller)
+            const bedBase2 = new THREE.Mesh(
+                new THREE.BoxGeometry(1.8, 0.3, 2.8),
+                bedMaterial
+            );
+            bedBase2.position.set(0, 0.15, 0);
+            bedBase2.castShadow = true;
+            bedBase2.receiveShadow = true;
+            bedroom2Group.add(bedBase2);
+            
+            const mattress2 = new THREE.Mesh(
+                new THREE.BoxGeometry(1.7, 0.2, 2.7),
+                mattressMaterial
+            );
+            mattress2.position.set(0, 0.4, 0);
+            mattress2.castShadow = true;
+            mattress2.receiveShadow = true;
+            bedroom2Group.add(mattress2);
+            
+            const pillow2 = new THREE.Mesh(
+                new THREE.BoxGeometry(1.2, 0.1, 0.5),
+                pillowMaterial
+            );
+            pillow2.position.set(0, 0.55, -1);
+            pillow2.castShadow = true;
+            pillow2.receiveShadow = true;
+            bedroom2Group.add(pillow2);
+            
+            bedroom2Group.position.set(0, 0, -4);
+            group.add(bedroom2Group);
+            
+            // Bedroom 3
+            const bedroom3Group = new THREE.Group();
+            
+            // Bed (smaller)
+            const bedBase3 = new THREE.Mesh(
+                new THREE.BoxGeometry(1.8, 0.3, 2.8),
+                bedMaterial
+            );
+            bedBase3.position.set(0, 0.15, 0);
+            bedBase3.castShadow = true;
+            bedBase3.receiveShadow = true;
+            bedroom3Group.add(bedBase3);
+            
+            const mattress3 = new THREE.Mesh(
+                new THREE.BoxGeometry(1.7, 0.2, 2.7),
+                mattressMaterial
+            );
+            mattress3.position.set(0, 0.4, 0);
+            mattress3.castShadow = true;
+            mattress3.receiveShadow = true;
+            bedroom3Group.add(mattress3);
+            
+            const pillow3 = new THREE.Mesh(
+                new THREE.BoxGeometry(1.2, 0.1, 0.5),
+                pillowMaterial
+            );
+            pillow3.position.set(0, 0.55, -1);
+            pillow3.castShadow = true;
+            pillow3.receiveShadow = true;
+            bedroom3Group.add(pillow3);
+            
+            bedroom3Group.position.set(5, 0, -4);
+            group.add(bedroom3Group);
+            
+            // Kitchen
+            const kitchenGroup = new THREE.Group();
+            
+            // Counter
+            const counterGeometry = new THREE.BoxGeometry(4, 0.1, 1.5);
+            const counterMaterial = new THREE.MeshStandardMaterial({ color: 0x696969 });
+            const counter = new THREE.Mesh(counterGeometry, counterMaterial);
+            counter.position.set(0, 0.9, 0);
+            counter.castShadow = true;
+            counter.receiveShadow = true;
+            kitchenGroup.add(counter);
+            
+            // Cabinets
+            const cabinetGeometry = new THREE.BoxGeometry(0.8, 0.8, 1.4);
+            const cabinetMaterial = new THREE.MeshStandardMaterial({ color: 0xf5f5f5 });
+            
+            for (let x = -1.5; x <= 1.5; x += 1) {
+                const cabinet = new THREE.Mesh(cabinetGeometry, cabinetMaterial);
+                cabinet.position.set(x, 0.4, 0);
+                cabinet.castShadow = true;
+                cabinet.receiveShadow = true;
+                kitchenGroup.add(cabinet);
+            }
+            
+            // Sink
+            const sinkGeometry = new THREE.BoxGeometry(0.8, 0.1, 0.6);
+            const sinkMaterial = new THREE.MeshStandardMaterial({ color: 0xc0c0c0 });
+            const sink = new THREE.Mesh(sinkGeometry, sinkMaterial);
+            sink.position.set(-1, 0.95, 0);
+            sink.castShadow = true;
+            sink.receiveShadow = true;
+            kitchenGroup.add(sink);
+            
+            // Stove
+            const stoveGeometry = new THREE.BoxGeometry(0.8, 0.05, 0.6);
+            const stoveMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 });
+            const stove = new THREE.Mesh(stoveGeometry, stoveMaterial);
+            stove.position.set(1, 0.95, 0);
+            stove.castShadow = true;
+            stove.receiveShadow = true;
+            kitchenGroup.add(stove);
+            
+            kitchenGroup.position.set(5, 0, 4);
+            group.add(kitchenGroup);
+            
+            // Dining Area
+            const diningGroup = new THREE.Group();
+            
+            // Table
+            const diningTableGeometry = new THREE.BoxGeometry(2, 0.1, 1.2);
+            const diningTableMaterial = new THREE.MeshStandardMaterial({ color: 0x8b4513 });
+            const diningTable = new THREE.Mesh(diningTableGeometry, diningTableMaterial);
+            diningTable.position.set(0, 0.7, 0);
+            diningTable.castShadow = true;
+            diningTable.receiveShadow = true;
+            diningGroup.add(diningTable);
+            
+            // Table legs
+            for (let x = -0.8; x <= 0.8; x += 1.6) {
+                for (let z = -0.4; z <= 0.4; z += 0.8) {
+                    const leg = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.05, 0.05, 1.4, 8),
+                        diningTableMaterial
+                    );
+                    leg.position.set(x, 0, z);
+                    leg.castShadow = true;
+                    leg.receiveShadow = true;
+                    diningGroup.add(leg);
+                }
+            }
+            
+            // Chairs
+            const chairPositions = [
+                { x: 0, z: -0.8 },
+                { x: -0.8, z: 0 },
+                { x: 0.8, z: 0 },
+                { x: 0, z: 0.8 }
+            ];
+            
+            chairPositions.forEach(pos => {
+                const chairGroup = new THREE.Group();
+                
+                // Chair seat
+                const chairSeat = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.4, 0.05, 0.4),
+                    diningTableMaterial
+                );
+                chairSeat.position.set(0, 0.4, 0);
+                chairSeat.castShadow = true;
+                chairSeat.receiveShadow = true;
+                chairGroup.add(chairSeat);
+                
+                // Chair back
+                const chairBack = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.4, 0.4, 0.05),
+                    diningTableMaterial
+                );
+                chairBack.position.set(0, 0.6, -0.2);
+                chairBack.castShadow = true;
+                chairBack.receiveShadow = true;
+                chairGroup.add(chairBack);
+                
+                // Chair legs
+                for (let x = -0.15; x <= 0.15; x += 0.3) {
+                    for (let z = -0.15; z <= 0.15; z += 0.3) {
+                        const leg = new THREE.Mesh(
+                            new THREE.CylinderGeometry(0.02, 0.02, 0.4, 8),
+                            diningTableMaterial
+                        );
+                        leg.position.set(x, 0.2, z);
+                        leg.castShadow = true;
+                        leg.receiveShadow = true;
+                        chairGroup.add(leg);
+                    }
+                }
+                
+                chairGroup.position.set(pos.x, 0, pos.z);
+                diningGroup.add(chairGroup);
+            });
+            
+            diningGroup.position.set(-4, 0, 4);
+            group.add(diningGroup);
+            
+            // Add interior lights
+            const lights = [
+                { position: [0, 2.5, 4], intensity: 0.7, distance: 8 },  // Living room
+                { position: [-4, 2.5, 4], intensity: 0.7, distance: 6 }, // Dining
+                { position: [5, 2.5, 4], intensity: 0.7, distance: 6 },  // Kitchen
+                { position: [-5, 2.5, -4], intensity: 0.7, distance: 6 }, // Bedroom 1
+                { position: [0, 2.5, -4], intensity: 0.7, distance: 6 },  // Bedroom 2
+                { position: [5, 2.5, -4], intensity: 0.7, distance: 6 }   // Bedroom 3
+            ];
+            
+            lights.forEach(light => {
+                const pointLight = new THREE.PointLight(0xffffff, light.intensity, light.distance);
+                pointLight.position.set(...light.position);
+                pointLight.castShadow = true;
+                group.add(pointLight);
+            });
+            
+            model = group;
+        }
+        
+        // Load the GLB model
+        function loadModel() {
+            const loader = new THREE.GLTFLoader();
+            loader.load(
+                modelPath,
+                function (gltf) {
+                    model = gltf.scene;
+                    model.traverse(function (child) {
+                        if (child.isMesh) {
+                            child.castShadow = true;
+                            child.receiveShadow = true;
+                        }
+                    });
+                    model.scale.set(1, 1, 1);
+                    model.position.set(0, 0, 0);
+                    scene.add(model);
+                },
+                function (xhr) {
+                    console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+                },
+                function (error) {
+                    console.error('An error happened', error);
+                }
+            );
+        }
+        
+        // Handle window resize
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        
+        // Change view mode
+        function changeViewMode() {
+            const mode = document.getElementById('view-mode').value;
+            
+            switch (mode) {
+                case '3d':
+                    camera.position.set(5, 5, 5);
+                    break;
+                case 'top':
+                    camera.position.set(0, 10, 0);
+                    break;
+                case 'front':
+                    camera.position.set(0, 0, 10);
+                    break;
+                case 'side':
+                    camera.position.set(10, 0, 0);
+                    break;
+                case 'interior':
+                    camera.position.set(0, 1.6, 0);
+                    break;
+            }
+            
+            controls.update();
+        }
+        
+        // Toggle wireframe mode
+        function toggleWireframe() {
+            const showWireframe = document.getElementById('show-wireframe').checked;
+            
+            scene.traverse(function (child) {
+                if (child.isMesh) {
+                    child.material.wireframe = showWireframe;
+                }
+            });
+        }
+        
+        // Toggle interior lights
+        function toggleInteriorLights() {
+            const showLights = document.getElementById('show-interior-lights').checked;
+            
+            scene.traverse(function (child) {
+                if (child.isLight && child !== directionalLight && child !== ambientLight) {
+                    child.visible = showLights;
+                }
+            });
+        }
+        
+        // Change rotation speed
+        function changeRotationSpeed() {
+            rotationSpeed = document.getElementById('rotation-speed').value;
+        }
+        
+        // Reset camera position
+        function resetCamera() {
+            camera.position.set(5, 5, 5);
+            controls.target.set(0, 0, 0);
+            controls.update();
+        }
+        
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            if (rotationSpeed > 0 && model) {
+                model.rotation.y += rotationSpeed * 0.01;
+            }
+            
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        
+        // Initialize the viewer when the page loads
+        window.onload = initViewer;
+    </script>
+</body>
+</html>

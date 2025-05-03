@@ -17,7 +17,10 @@ export default defineConfig({
         gallery: resolve(__dirname, 'src/pages/gallery.html'),
         concept: resolve(__dirname, 'src/pages/concept.html'),
         contact: resolve(__dirname, 'src/pages/contact.html'),
-        calculator: resolve(__dirname, 'src/pages/calculator.html')
+        calculator: resolve(__dirname, 'src/pages/calculator.html'),
+        modelViewer: resolve(__dirname, 'src/pages/model-viewer.html'),
+        modelViewer2: resolve(__dirname, 'src/pages/model-viewer2.html'),
+        modelViewer3: resolve(__dirname, 'src/pages/model-viewer3.html')
       }
     }
   }
