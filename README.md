@@ -62,21 +62,36 @@ npm run preview
 ## Project Structure
 
 ```
+├── public/
+│   ├── assets/
+│   │   ├── images/          # Static images
+│   │   ├── videos/         # Promotional videos
+│   │   └── fonts/          # Custom fonts
 ├── src/
+│   ├── components/         # Reusable UI components
 │   ├── js/
-│   │   ├── main.js
-│   │   └── modules/
-│   ├── pages/
+│   │   ├── main.js        # Main application logic
+│   │   ├── modules/
+│   │   │   ├── calculator.js  # Mortgage calculator
+│   │   │   └── gallery.js     # Image gallery handling
+│   │   └── utils/         # Utility functions
+│   ├── pages/              # Page templates
 │   │   ├── calculator.html
 │   │   ├── concept.html
 │   │   ├── contact.html
 │   │   ├── floor-plan.html
 │   │   └── gallery.html
-│   └── styles/
-│       └── main.scss
-├── index.html
+│   ├── styles/
+│   │   ├── base/          # Base styles and variables
+│   │   ├── components/     # Component-specific styles
+│   │   ├── layouts/        # Layout structures
+│   │   └── main.scss       # Main SCSS entry point
+│   └── sections/           # Reusable page sections
+├── .env                    # Environment variables
+├── .gitignore
+├── index.html              # Main entry point
 ├── package.json
-├── vite.config.js
+├── vite.config.js          # Vite configuration
 └── README.md
 ```
 
