@@ -1,6 +1,8 @@
 flask
-flask-cors
+requests
+jsonify
+langchain_ollama
+langchain_community
 langchain
-langchain-community
-langchain-ollama
+flask_cors
 faiss-cpu

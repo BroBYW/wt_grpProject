@@ -32,7 +32,31 @@ git clone [repository-url]
 cd [project-directory]
 ```
 
-2. Install dependencies:
+## Install chatbot dependencies:
+go to https://ollama.com/download to download Ollama and run the installer
+copy paste api key into .env file
+Using a python interpreter, create a virtual environment (.venv) within the same directory
+In the same directory, create a requirements.txt file and copy paste the following contents, then save the file:
+    flask
+    requests
+    jsonify
+    langchain_ollama
+    langchain_community
+    langchain
+    flask_cors
+    faiss-cpu
+
+```bash
+.\.venv\Scripts\activate    
+pip install -r requirements.txt
+deactivate
+ollama pull nomic-embed-text
+ollama pull llama3.2:3b
+.\.venv\Scripts\activate  
+python rag_api.py
+```
+
+2. Open a new powershell terminal. Install dependencies:
 ```bash
 npm install
 npm install @azure-rest/ai-inference @azure/core-auth @azure/core-sse
