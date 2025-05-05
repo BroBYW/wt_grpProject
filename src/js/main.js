@@ -110,6 +110,10 @@ const generateBotResponse = async (incomingMessageDiv) => {
       body: JSON.stringify({ question: userQuestion }),
     });
 
+    if (!ragResponse.ok) {
+      const errorData = await ragResponse.json().catch(() => ({}));
+      throw new Error(errorData.error || `API request failed (${ragResponse.status})`);
+    }
     const ragData = await ragResponse.json(); // 假设返回 { context: "...", question: "..." }
 
     // 2. 把 RAG 的内容加上用户问题，一起传给 GitHub 模型
